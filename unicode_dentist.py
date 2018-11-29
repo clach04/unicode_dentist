@@ -16,6 +16,7 @@ import cgi
 import urllib
 import webbrowser
 
+IS_PY2 = sys.version_info[0] == 2
 
 #import cherrypy # http://www.cherrypy.org/
 ## rhubarb tart # http://rhubarbtart.org/
@@ -26,11 +27,11 @@ try:
     #raise(ImportError)
     import cherrypy
     from cherrypy.lib.static import serve_file
-except ImportError, info:
+except ImportError:
     try:
         import dietcherrypy as cherrypy
         serve_file = cherrypy.serve_file
-    except ImportError, info:
+    except ImportError:
         cherrypy = None
 
 ############################
@@ -89,10 +90,10 @@ def form_gen(function_object=None, post=None, text_message=None, url=None, defau
 ############################
 
 def dumb_word_split(in_str):
-    in_str=in_str.replace(',', ' ');
-    in_str=in_str.replace('.', ' ');
-    in_str=in_str.replace('"', ' ');
-    in_str=in_str.replace("'", ' ');
+    in_str=in_str.replace(b',', b' ');
+    in_str=in_str.replace(b'.', b' ');
+    in_str=in_str.replace(b'"', b' ');
+    in_str=in_str.replace(b"'", b' ');
     return in_str.split()
 
 def find_non_ascii(line_obj, expected_encoding=None, filename=None):
@@ -102,10 +103,13 @@ def find_non_ascii(line_obj, expected_encoding=None, filename=None):
     
     @param expected_encoding what encoding is the file in?
     """
-    print 'expected_encoding:', expected_encoding
-    max_ascii = chr(126)
-    max_ascii = chr(127)
-    #print 'using %r as max_ascii' % (max_ascii,)
+    print('expected_encoding:', expected_encoding)
+    if IS_PY2:
+        max_ascii = chr(126)
+        max_ascii = chr(127)
+    else:
+        max_ascii = 127
+    #print('using %r as max_ascii' % (max_ascii,))
 
     result = []
     data_count = 0
@@ -121,32 +125,46 @@ def find_non_ascii(line_obj, expected_encoding=None, filename=None):
             if x >= max_ascii:
                 print_each_context=True
                 if print_each_context:
-                    result.append('%s:%d: %3d %s @ %d' % (filename, line_count, ord(x), x, data_count))
+                    if IS_PY2:
+                        result.append('%s:%d: %3d %s @ %d' % (filename, line_count, ord(x), x, data_count))
+                    else:
+                        result.append('%s:%d: %3d %s @ %d' % (filename, line_count, x, x, data_count))  # TODO chr(x) before count
                     result.append(repr(line))
-                    result.append(line)
+                    if IS_PY2:
+                        result.append(line)
                     result.append('')
                 try:
                     extended_chars[x] += 1
-                except KeyError, info:
+                except KeyError:
                     extended_chars[x] = 1
-                #print '%3d' %(ord(x),) , x, '@', data_count
-    #print len(line), line
-    #print extended_chars
+                #print('%3d' %(ord(x),) , x, '@', data_count)
+    #print(len(line), line)
+    #print(extended_chars)
     if extended_chars:
         result.append('========= character table =========')
         for x in extended_chars:
             if expected_encoding:
                 try:
-                    print expected_encoding, repr(x)
-                    unicode_codepoint=x.decode(expected_encoding)
+                    print(expected_encoding, repr(x))
+                    if IS_PY2:
+                        unicode_codepoint = x.decode(expected_encoding)
+                    else:
+                        unicode_codepoint = chr(x).encode(expected_encoding)  # not convinced this approach will work
                     unicode_codepoint_utf8=unicode_codepoint.encode('utf8')
                     unicode_codepoint=repr(unicode_codepoint)+' 0x%04x'%ord(unicode_codepoint)+' utf8:"'+unicode_codepoint_utf8+'" ('+repr(unicode_codepoint_utf8)+')'
                 except UnicodeDecodeError:
                     #unicode_codepoint=''
                     unicode_codepoint='not valid %s character' % expected_encoding
+                except UnicodeEncodeError:
+                    unicode_codepoint='not valid %s character' % expected_encoding
             else:
                 unicode_codepoint=''
-            result.append('%3d 0x%x' % (ord(x),ord(x),)  + ' ' + unicode_codepoint + ' ' + x + ' ' + 'occurrences' + ' ' + str(extended_chars[x]))
+            if IS_PY2:
+                result.append('%3d 0x%x' % (ord(x),ord(x),)  + ' ' + unicode_codepoint + ' ' + x + ' ' + 'occurrences' + ' ' + str(extended_chars[x]))
+            else:
+                # FIXME by default sys.stdout defaults to utf-8 encoding (see sys.stdout.encoding) on all platforms
+                # so chr(x) will result in unprintable characters under Windows
+                result.append('%3d 0x%x' % (x, x,)  + ' ' + unicode_codepoint + ' ' + chr(x)  + ' ' + 'occurrences' + ' ' + repr(extended_chars[x]))
         result.append('=' * 65)
         result.append('')
     
@@ -154,7 +172,7 @@ def find_non_ascii(line_obj, expected_encoding=None, filename=None):
     
     """
     word_count = 0
-    print 'debug', repr(line)
+    print('debug', repr(line))
     for temp_word in word_list:
         #import pdb ; pdb.set_trace()
         for x in extended_chars:
@@ -163,7 +181,7 @@ def find_non_ascii(line_obj, expected_encoding=None, filename=None):
                 result.append('...' + ' '.join(word_list[word_count-2:word_count+2]) + '...')
         word_count += 1
     """
-    
+    print(repr(result))
     return '\n'.join(result)
 
 
@@ -195,7 +213,7 @@ class Root(object):
 
             '''
             return __result
-        print repr(string_data[:10])
+        print(repr(string_data[:10]))
         string_data = string_data.replace('\r', '')
         """
         if string_data[-1] != '\n':
@@ -214,8 +232,8 @@ def main(argv=None):
         argv = sys.argv
 
     # nasty argv command line argument parsing
-    print repr(argv)
-    print len(argv)
+    print(repr(argv))
+    print(len(argv))
     if len(argv) > 1:
         # Assume filename and optional encoding
         # no need for web server mode (file mode it more reliable, we have the raw bytes)
@@ -228,16 +246,16 @@ def main(argv=None):
         f = open(filename, 'rb')
         string_data = f.read()
         f.close()
-        string_data = string_data.replace('\r', '')  # NOTE universal new lines file mode would be better but not all implementations have this yet.....
-        result = find_non_ascii(string_data.split('\n'), expected_encoding=expect_encoding, filename=filename)
+        string_data = string_data.replace(b'\r', b'')  # NOTE universal new lines file mode would be better but not all implementations have this yet.....
+        result = find_non_ascii(string_data.split(b'\n'), expected_encoding=expect_encoding, filename=filename)
         if result:
-            print result
+            print(result)
         else:
-            print '%r is valid %s' % (filename, expect_encoding)
+            print('%r is valid %s' % (filename, expect_encoding))
         return 0
     
     if cherrypy:
-        print 'cherrypy.__version__', cherrypy.__version__
+        print('cherrypy.__version__', cherrypy.__version__)
         
         class DumbOpt(object):
             pass
