@@ -3,6 +3,7 @@
 # -*- coding: cp-1252 -*-
 
 Is it safe!?
+[Marathon Man - do not click on this if you are squeamish!](https://www.youtube.com/watch?v=avNraWT8CSI)
 
   * Is this file US-ASCII (7 bit) safe?
   * Is this file UTF-8 safe?
