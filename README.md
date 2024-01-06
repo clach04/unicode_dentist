@@ -18,6 +18,7 @@ Python 3.x and 2.7 (maybe 2.x?) tools:
   * unicode_dentist.py - find invalid **bytes** in a single file, will report statistics and context
   * wildcard_unicode_dentist.py - same as above but handles multiple files in a list (potentially with wild cards, even under Microsoft Windows)
   * line_check.py - display lines that are not in the expected encoding, along with line number and final "bad" line number count
+  * validate_utf8.py - check if files are encoded correctly or not, bool pass or fail, use unicode_dentist.py or line_check.py to determine problem(s)
 
 ## Examples
 
@@ -84,4 +85,9 @@ Sample output non ASCII:
     169 0xa9 not valid us-ascii character © occurrences 1
     128 0x80 not valid us-ascii character € occurrences 2
     =================================================================
+
+### validate_utf8 example
+
+    env FILE_ENCODING=us-ascii DO_NOT_STOP=true ./validate_utf8.py
+    env FILE_ENCODING=us-ascii DO_NOT_STOP=true ./validate_utf8.py  README.md  validate_utf8.py
 
