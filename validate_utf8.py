@@ -84,8 +84,8 @@ def check_file(filename):
             global global_bad_file_counter
             global_bad_file_counter += 1
             print('%s is not %s' % (filename, file_encoding))
-            print('Consider using force_into_utf8.py or manually fix')
             if stop_on_invalid_encoding:
+                print('Consider using force_into_utf8.py or manually fix')
                 raise  # re-raise for now, potential to skip and carry on processing with warning only
 
 
@@ -159,6 +159,7 @@ def main(argv=None):
 
     if not stop_on_invalid_encoding and global_bad_file_counter:
         print('BAD %d files' % global_bad_file_counter)
+        print('Consider using force_into_utf8.py or manually fix')
 
     return 0
 
