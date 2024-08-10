@@ -1,7 +1,8 @@
-#!/usr/bin/env python
+#!/usr/bin/env python2
 # -*- coding: ascii -*-
 # vim:ts=4:sw=4:softtabstop=4:smarttab:expandtab
 #
+# - Seeing issues with Python 3.12.1
 # Wildcard Unicode Dentist, Is it safe? http://www.imdb.com/title/tt0074860/quotes
 # Needs Unicode Dentist
 # Copyright (C) 2013 Chris Clark

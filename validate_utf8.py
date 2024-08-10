@@ -7,6 +7,8 @@ Super confusing when/if this happens.
 
 Sanity check all (file pattern files).
 
+Python 3 or 2
+
 Poor mans https://github.com/clach04/unicode_dentist
 
 Ideas:
