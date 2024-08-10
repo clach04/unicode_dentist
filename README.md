@@ -15,10 +15,10 @@ Is it safe!?
 
 Python 3.x and 2.7 (maybe 2.x?) tools:
 
-  * unicode_dentist.py - find invalid **bytes** in a single file, will report statistics and context
+  * unicode_dentist.py - Python 3 or 2 - find invalid **bytes** in a single file, will report statistics and context
   * wildcard_unicode_dentist.py - same as above but handles multiple files in a list (potentially with wild cards, even under Microsoft Windows)
   * line_check.py - display lines that are not in the expected encoding, along with line number and final "bad" line number count
-  * validate_utf8.py - check if files are encoded correctly or not, bool pass or fail, use unicode_dentist.py or line_check.py to determine problem(s)
+  * validate_utf8.py - Python 3 or 2 - check if files are encoded correctly or not, bool pass or fail, use unicode_dentist.py or line_check.py to determine problem(s)
 
 ## Examples
 
