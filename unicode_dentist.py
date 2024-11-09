@@ -249,7 +249,10 @@ def main(argv=None):
         string_data = string_data.replace(b'\r', b'')  # NOTE universal new lines file mode would be better but not all implementations have this yet.....
         result = find_non_ascii(string_data.split(b'\n'), expected_encoding=expect_encoding, filename=filename)
         if result:
-            print(result)
+            if IS_PY2:
+                print(result)
+            else:  # py3
+                print(repr(result))  # FIXME / TODO revisit
         else:
             print('%r is valid %s' % (filename, expect_encoding))
         return 0
