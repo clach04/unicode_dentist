@@ -26,8 +26,8 @@ def main(argv=None):
     print('Python %s on %s' % (sys.version.replace('\n', ' '), sys.platform.replace('\n', ' ')))
     # nasty argv command line argument parsing
     expect_encoding = 'us-ascii'
-    filename_pattern = '*'
-    
+    print('using: %r' % expect_encoding)
+
     print(repr(argv))
     print(len(argv))
     if len(argv) > 1:
@@ -35,13 +35,18 @@ def main(argv=None):
         # no need for web server mode (file mode it more reliable, we have the raw bytes)
         expect_encoding = argv[1]
 
-        try:
-            filename_pattern_list = argv[2:]
-        except IndexError:
-            filename_pattern_list = ['*']
+    try:
+        filename_pattern_list = argv[2:]
+    except IndexError:
+        pass
 
+    if not filename_pattern_list:
+        filename_pattern_list = ['*']
+
+    print('filename_pattern_list: %r' % filename_pattern_list)
     for filename_pattern in filename_pattern_list:
         for filename in glob.glob(filename_pattern):
+            print('about to check: %r' % filename)
             params = ['unicode_dentist', filename, expect_encoding]
             unicode_dentist.main(params)
 
