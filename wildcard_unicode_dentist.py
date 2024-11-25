@@ -2,7 +2,7 @@
 # -*- coding: ascii -*-
 # vim:ts=4:sw=4:softtabstop=4:smarttab:expandtab
 #
-# - Seeing issues with Python 3.12.1
+# - Seeing display issues with Python 3.12.1, but it does run and return useful information
 # Wildcard Unicode Dentist, Is it safe? http://www.imdb.com/title/tt0074860/quotes
 # Needs Unicode Dentist
 # Copyright (C) 2013 Chris Clark
@@ -23,25 +23,27 @@ def main(argv=None):
     if argv is None:
         argv = sys.argv
 
+    print('Python %s on %s' % (sys.version.replace('\n', ' '), sys.platform.replace('\n', ' ')))
     # nasty argv command line argument parsing
     expect_encoding = 'us-ascii'
     filename_pattern = '*'
     
-    print repr(argv)
-    print len(argv)
+    print(repr(argv))
+    print(len(argv))
     if len(argv) > 1:
         # Assume filename and optional encoding
         # no need for web server mode (file mode it more reliable, we have the raw bytes)
         expect_encoding = argv[1]
-        
+
         try:
-            filename_pattern = argv[2]
+            filename_pattern_list = argv[2:]
         except IndexError:
-            filename_pattern = '*'
-    
-    for filename in glob.glob(filename_pattern):
-        params = ['unicode_dentist', filename, expect_encoding]
-        unicode_dentist.main(params)
+            filename_pattern_list = ['*']
+
+    for filename_pattern in filename_pattern_list:
+        for filename in glob.glob(filename_pattern):
+            params = ['unicode_dentist', filename, expect_encoding]
+            unicode_dentist.main(params)
 
     return 0
 
