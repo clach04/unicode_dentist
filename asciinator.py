@@ -33,6 +33,7 @@ try:
     """Reasons to NOT use elinks
     cp1252 / win152 - 0xA0 - nbsp - non-breaking space - becomes "*" start in elinks
     c-cidilla ends up as two characters
+    GBP currency symbol becomes becomes -L-
     """
     import elinks  # https://github.com/jwilk-archive/python-elinks
 except ImportError:
@@ -55,6 +56,8 @@ global_mappings_dict = {
     #u'®': u'(R)',  # 00AE  REGISTERED SIGN
     #u'\xa0': u'&nbsp;',  # 'NO-BREAK SPACE' (U+00A0)
     #u'\xa0': u' ',  # 'NO-BREAK SPACE' (U+00A0)
+    u'\xa3': u'GBP',  # Unicode Character British Currency Pound Sign (U+00A3)
+    u'\xd7': u'x',  # Unicode Character Multiplication Sign (U+00D7)
     u'\xad': u'-',  # 'soft hyphen' (U+00AD) -- &shy;
     u'·': u'-',  # cp1252 0xb7 U+00B7 MIDDLE DOT
 }
