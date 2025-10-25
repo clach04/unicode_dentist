@@ -12,6 +12,8 @@ Sample Usage:
     python asciinator.py FILENAME
     python asciinator.py FILENAME cp1252
     python asciinator.py FILENAME cp1252  > FILENAME_ascii
+    python asciinator.py FILENAME cp1252 FILENAME_ascii
+    python asciinator.py FILENAME cp1252 -u  # use input filename as output
 
 Ideas:
   * generate mappings for different encodings then apply to binary files (not Unicode strings), e.g. fix mixed encodings files (do utf-8, then cp1252, etc.)
@@ -60,6 +62,10 @@ global_mappings_dict = {
     u'\xd7': u'x',  # Unicode Character Multiplication Sign (U+00D7)
     u'\xad': u'-',  # 'soft hyphen' (U+00AD) -- &shy;
     u'·': u'-',  # cp1252 0xb7 U+00B7 MIDDLE DOT
+    u'\xe9': u'e',  # U+00e9 Latin Small Letter E with Acute
+    u'\u2026': u'...',  # U+2026  a horizontal ellipsis
+    u'\uFF08': u'(',  # U+FF08  Fullwidth Left Parenthesis
+    u'\uFF09': u')',  # U+FF09  Fullwidth Right  Parenthesis
 }
 
 if os.environ.get('USE_HTML'):
@@ -68,14 +74,14 @@ if os.environ.get('USE_HTML'):
     global_mappings_dict[u'™'] = u'&trade;'  # TRADE MARK SIGN (U+2122)
     global_mappings_dict[u'\xa0'] = u'&nbsp;'  # 'NO-BREAK SPACE' (U+00A0)
     global_mappings_dict[u'\u202F'] = u'&nbsp;'  # Narrow No-Break Space (NNBSP) (U+202F)
-    #global_mappings_dict[] = 
+    #global_mappings_dict[] =
 elif os.environ.get('NO_HTML', True):
     global_mappings_dict[u'©'] = u'(c)'  #  00A9  COPYRIGHT SIGN
     global_mappings_dict[u'®'] = u'(R)'  # 00AE  REGISTERED SIGN
     global_mappings_dict[u'™'] = u'(TM)'  # TRADE MARK SIGN (U+2122)
     global_mappings_dict[u'\xa0'] = u' '  # 'NO-BREAK SPACE' (U+00A0)
     global_mappings_dict[u'\u202F'] = u' '  # Narrow No-Break Space (NNBSP) (U+202F)
-    #global_mappings_dict[] = 
+    #global_mappings_dict[] =
 
 
 def my_simple_asciinator(in_str, mappings_dict=None):
