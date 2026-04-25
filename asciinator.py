@@ -59,6 +59,7 @@ global_mappings_dict = {
     #u'\xa0': u'&nbsp;',  # 'NO-BREAK SPACE' (U+00A0)
     #u'\xa0': u' ',  # 'NO-BREAK SPACE' (U+00A0)
     u'\xa3': u'GBP',  # Unicode Character British Currency Pound Sign (U+00A3)
+    u'\u20ac': u'EUR',  # Unicode Character British Currency Euro Symbol (U+20AC)
     u'\xd7': u'x',  # Unicode Character Multiplication Sign (U+00D7)
     u'\xad': u'-',  # 'soft hyphen' (U+00AD) -- &shy;
     u'·': u'-',  # cp1252 0xb7 U+00B7 MIDDLE DOT
