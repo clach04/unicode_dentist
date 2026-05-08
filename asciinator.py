@@ -62,7 +62,9 @@ global_mappings_dict = {
     u'\u20ac': u'EUR',  # Unicode Character British Currency Euro Symbol (U+20AC)
     u'\xd7': u'x',  # Unicode Character Multiplication Sign (U+00D7)
     u'\xad': u'-',  # 'soft hyphen' (U+00AD) -- &shy;
+    u'\u00B0': u' degrees ',  # Degrees o symbol superscript - Degree Sign U+00B0
     u'·': u'-',  # cp1252 0xb7 U+00B7 MIDDLE DOT
+    u'\u00E2': u'a',  # a^ -- Latin Small Letter A with Circumflex U+00E2
     u'\xe9': u'e',  # U+00e9 Latin Small Letter E with Acute
     u'\u2026': u'...',  # U+2026  a horizontal ellipsis
     u'\uFF08': u'(',  # U+FF08  Fullwidth Left Parenthesis
