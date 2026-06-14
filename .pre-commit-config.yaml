@@ -5,6 +5,7 @@
 #   prek install --hook-type pre-commit --hook-type pre-push
 #   prek run
 #   prek run -vvv   #  verbose tracing output
+#   prek run --all-files
 #   NOTE on every run prek writes a log file to ~/.cache/prek/prek.log
 #
 
@@ -12,7 +13,7 @@
 # https://github.com/pre-commit/pre-commit
 
 # https://pre-commit.com/#temporarily-disabling-hooks
-
+#   ... --no-verify
 
 #default_install_hook_types: [pre-commit, pre-push, commit-msg]
 default_install_hook_types: [pre-commit, pre-push]
