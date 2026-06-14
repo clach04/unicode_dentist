@@ -25,10 +25,18 @@ repos:
         #files: ^src/
         #files: *.py
         types: [python]
-      - id: lint-py  # currently a test, not to be enforced yet
-        name: ruff-format (py)
+      - id: ruff-format-check  # currently a test, not to be enforced yet
+        name: ruff-format-check (py)
         language: system
         entry: ruff format --check
+        #files: ^src/
+        #files: *.py
+        types: [python]
+      - id: ruff-format-fix  # currently a test, not to be enforced yet
+        name: ruff-format-check (py)
+        stages: [pre-push]
+        language: system
+        entry: ruff format
         #files: ^src/
         #files: *.py
         types: [python]
