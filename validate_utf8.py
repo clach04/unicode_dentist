@@ -35,12 +35,18 @@ except ImportError:
 # alternatively check out https://github.com/pavdmyt/yaspin - spinner
 # alternatively manually implement a dumb spinner?
 
-is_win = sys.platform.startswith('win')
-extensions_to_check = ['.md', '.txt']
+is_win = sys.platform.startswith("win")
+extensions_to_check = [".md", ".txt"]
 
-non_ascii_message = 'Consider using force_into_utf8.py  asciinator.py or manually fix'
+non_ascii_message = "Consider using force_into_utf8.py  asciinator.py or manually fix"
 
-def walker(directory_name, process_file_function=None, process_dir_function=None, extra_params_dict=None):
+
+def walker(
+    directory_name,
+    process_file_function=None,
+    process_dir_function=None,
+    extra_params_dict=None,
+):
     """extra_params_dict optional dict to be passed into process_file_function() and process_dir_function()
 
     def process_file_function(full_path, extra_params_dict=None)
@@ -48,12 +54,14 @@ def walker(directory_name, process_file_function=None, process_dir_function=None
     """
     extra_params_dict or {}
     if tqdm:  # can not perform bool conditional on "t" :-( ; TypeError: bool() undefined when iterable == total == None
-        #t = tqdm.tqdm()
-        t = tqdm.tqdm(desc='Walking files', unit=' files', ascii=True)  # progress bar
-        #t = tqdm.tqdm(unit=' files', ascii=True)  # progress bar
+        # t = tqdm.tqdm()
+        t = tqdm.tqdm(desc="Walking files", unit=" files", ascii=True)  # progress bar
+        # t = tqdm.tqdm(unit=' files', ascii=True)  # progress bar
     else:
         t = None
-    if False and alive_progress:  # Disabled due to call later not working, expects a context manager
+    if (
+        False and alive_progress
+    ):  # Disabled due to call later not working, expects a context manager
         # TODO debug and/or try https://www.reddit.com/r/learnpython/comments/ozny83/how_to_use_context_manager_without_with/
         bar = alive_progress.alive_bar()
     else:
@@ -62,7 +70,7 @@ def walker(directory_name, process_file_function=None, process_dir_function=None
     for root, subdirs, files in os.walk(directory_name):
         if process_file_function:
             for filepath in files:
-                full_path = os.path.join(root,filepath)
+                full_path = os.path.join(root, filepath)
                 if t is not None:
                     t.update()
                 if bar:
@@ -74,24 +82,29 @@ def walker(directory_name, process_file_function=None, process_dir_function=None
                 if t is not None:
                     t.update()
                 if bar:
-                    #next(bar)()  # failed
+                    # next(bar)()  # failed
                     bar(skipped=False)
                 process_dir_function(full_path, extra_params_dict=extra_params_dict)
+
 
 def per_file_function_callback(full_path, extra_params_dict=None):
     # NOTE does directory ignoring here, would be more efficient in walker()
 
-    #print('full_path %r' % full_path)
+    # print('full_path %r' % full_path)
     # potentiall ignore git (TODO hg, svn, ...) irrespective of `ignore_directory_list`
-    #git_dir = os.sep + '.git' + os.sep  # just to be sure?
+    # git_dir = os.sep + '.git' + os.sep  # just to be sure?
     # Take a look at https://geoff.greer.fm/2016/09/26/ignore/ .ignore file
-    ignore_directory_list = extra_params_dict.get('ignore_directory_list', [])  # list of full directory name (not an extract)
+    ignore_directory_list = extra_params_dict.get(
+        "ignore_directory_list", []
+    )  # list of full directory name (not an extract)
     for x in ignore_directory_list:
-        tmp_name  = os.sep + x + os.sep  # only match whole directory path rather than a fragment
+        tmp_name = (
+            os.sep + x + os.sep
+        )  # only match whole directory path rather than a fragment
         if tmp_name in full_path:
             return
 
-    #if 'Games2' in full_path:
+    # if 'Games2' in full_path:
     #    import pdb  ; pdb.set_trace()
 
     check_this_one = False
@@ -101,41 +114,47 @@ def per_file_function_callback(full_path, extra_params_dict=None):
             break
 
     if check_this_one:
-        #print(full_path)
+        # print(full_path)
         check_file(full_path)
-        extra_params_dict['counter'] += 1
+        extra_params_dict["counter"] += 1
+
 
 stop_on_invalid_encoding = False
-if os.environ.get('STOP_ON_BAD_ENCODING'):
+if os.environ.get("STOP_ON_BAD_ENCODING"):
     stop_on_invalid_encoding = True
-if os.environ.get('DO_NOT_STOP'):
+if os.environ.get("DO_NOT_STOP"):
     stop_on_invalid_encoding = False
-file_encoding = os.environ.get('FILE_ENCODING', 'utf-8')
+file_encoding = os.environ.get("FILE_ENCODING", "utf-8")
 global_bad_file_counter = 0
+
+
 def check_file(filename):
-        #import time ; time.sleep(1)  # DEBUG sleep 1 second
-        f = open(filename, 'rb')
-        d = f.read()
-        f.close()
-        #offset = 2424
-        #print('%r' % d[offset - 10:offset + 10])
-        #import pdb; pdb.set_trace()
-        try:
-            s = d.decode(file_encoding)
-        except UnicodeDecodeError:
-            global global_bad_file_counter
-            global_bad_file_counter += 1
-            print('%s is not %s' % (filename, file_encoding))
-            if stop_on_invalid_encoding:
-                print(non_ascii_message)
-                raise  # re-raise for now, potential to skip and carry on processing with warning only
+    # import time ; time.sleep(1)  # DEBUG sleep 1 second
+    f = open(filename, "rb")
+    d = f.read()
+    f.close()
+    # offset = 2424
+    # print('%r' % d[offset - 10:offset + 10])
+    # import pdb; pdb.set_trace()
+    try:
+        s = d.decode(file_encoding)
+    except UnicodeDecodeError:
+        global global_bad_file_counter
+        global_bad_file_counter += 1
+        print("%s is not %s" % (filename, file_encoding))
+        if stop_on_invalid_encoding:
+            print(non_ascii_message)
+            raise  # re-raise for now, potential to skip and carry on processing with warning only
 
 
 def main(argv=None):
     if argv is None:
         argv = sys.argv
 
-    print('Python %s on %s' % (sys.version.replace('\n', ' '), sys.platform.replace('\n', ' ')))
+    print(
+        "Python %s on %s"
+        % (sys.version.replace("\n", " "), sys.platform.replace("\n", " "))
+    )
 
     """Usage:
     No Parameters
@@ -173,42 +192,55 @@ def main(argv=None):
     else:
         filenames = argv[1:]
 
-    #doit()
+    # doit()
     # ./validate_utf8.py  *.md *.txt
     # py -3 validate_utf8.py  *.md *.txt
-    print('%d files to check explictly' % len(filenames))
-    #print(filenames)
+    print("%d files to check explictly" % len(filenames))
+    # print(filenames)
     if filenames:
         if alive_progress:
             # currently py3 only, TODO look to add calls to older alive_progress.alive_bar() API
             # also crappy Windows support out of box
-            filenames = alive_progress.alive_it(filenames)  # progress bar - NOTE needs min version 2, which means Python3 only
+            filenames = alive_progress.alive_it(
+                filenames
+            )  # progress bar - NOTE needs min version 2, which means Python3 only
         elif tqdm:
-            #filenames = tqdm.tqdm(filenames)  # progress bar
-            filenames = tqdm.tqdm(filenames, desc='Checking list', unit=' files', ascii=True)  # progress bar
-            #filenames = tqdm.tqdm(filenames, unit=' files', ascii=True)  # progress bar
+            # filenames = tqdm.tqdm(filenames)  # progress bar
+            filenames = tqdm.tqdm(
+                filenames, desc="Checking list", unit=" files", ascii=True
+            )  # progress bar
+            # filenames = tqdm.tqdm(filenames, unit=' files', ascii=True)  # progress bar
         for filename_counter, filename in enumerate(filenames):
             # TODO progress log
             check_file(filename)
     else:
-        print('recursively checking')
-        #print('ERROR No files to check')
-        #raise NotImplementedError('ERROR No files to check')
+        print("recursively checking")
+        # print('ERROR No files to check')
+        # raise NotImplementedError('ERROR No files to check')
         extra_params_dict = {
-            'counter': 0,
-            'ignore_directory_list': ['.git', '.hg', '__pycache__', '.mozilla', '.cache'],  # ignore directory list, TODO consider .ignore file support
+            "counter": 0,
+            "ignore_directory_list": [
+                ".git",
+                ".hg",
+                "__pycache__",
+                ".mozilla",
+                ".cache",
+            ],  # ignore directory list, TODO consider .ignore file support
         }
 
-        dir_name = '.'
-        print('checking %s recursively' % dir_name)
-        walker(dir_name, process_file_function=per_file_function_callback, extra_params_dict=extra_params_dict)
-        filename_counter = extra_params_dict['counter']
-        #print('checked %d files' % extra_params_dict['counter'])
-        print('checked %d files' % filename_counter)
-
+        dir_name = "."
+        print("checking %s recursively" % dir_name)
+        walker(
+            dir_name,
+            process_file_function=per_file_function_callback,
+            extra_params_dict=extra_params_dict,
+        )
+        filename_counter = extra_params_dict["counter"]
+        # print('checked %d files' % extra_params_dict['counter'])
+        print("checked %d files" % filename_counter)
 
     if not stop_on_invalid_encoding and global_bad_file_counter:
-        print('BAD %d files' % global_bad_file_counter)
+        print("BAD %d files" % global_bad_file_counter)
         print(non_ascii_message)
 
     return 0
