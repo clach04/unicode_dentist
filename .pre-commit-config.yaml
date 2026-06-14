@@ -9,6 +9,8 @@
 #   NOTE on every run prek writes a log file to ~/.cache/prek/prek.log
 #
 
+# Using pre-push in some places so as to not intefer with work until sharing time
+
 # Use pre-commit ONLY for backwards compat
 # https://github.com/pre-commit/pre-commit
 
