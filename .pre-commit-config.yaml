@@ -29,7 +29,8 @@ repos:
         stages: [pre-push]
     -   id: check-case-conflict
     -   id: check-executables-have-shebangs
-    -   id: check-shebang-scripts-are-executable
+    # prek 0.4.4 (f44270e63 2026-06-04) under Microsoft Windows builtin check-shebang-scripts-are-executable erroneously flags files https://github.com/j178/prek/issues/2213
+    #-   id: check-shebang-scripts-are-executable
     -   id: check-json
     -   id: check-yaml
     -   id: check-toml
