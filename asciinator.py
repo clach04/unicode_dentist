@@ -27,7 +27,7 @@ Ideas:
 import os
 import sys
 
-#import pdb ; pdb.set_trace()
+# import pdb ; pdb.set_trace()
 # http://jwilk.net/software/python-elinks
 try:
     if not os.environ.get('USE_ELINKS'):
@@ -42,51 +42,50 @@ except ImportError:
     elinks = None
 
 
-
 # I prefer the mappings in here compared with elinks.
 # defaults to html
 global_mappings_dict = {
-    u'“': u'"',  # 201C  LEFT DOUBLE QUOTATION MARK
-    u'”': u'"',  # 201D  RIGHT DOUBLE QUOTATION MARK
-    u"‘": u"'",  # 2018  LEFT SINGLE QUOTATION MARK
-    u"’": u"'",  # 2019  RIGHT SINGLE QUOTATION MARK
-    u'–': u'-',  # 2013  EN DASH
-    u'—': u'-',  # 2014  EM DASH
-    #u'©': u'&copy;',  # 00A9  COPYRIGHT SIGN
-    #u'©': u'(c)',  #  00A9  COPYRIGHT SIGN
-    #u'®': u'&reg;',  # 00AE  REGISTERED SIGN
-    #u'®': u'(R)',  # 00AE  REGISTERED SIGN
-    #u'\xa0': u'&nbsp;',  # 'NO-BREAK SPACE' (U+00A0)
-    #u'\xa0': u' ',  # 'NO-BREAK SPACE' (U+00A0)
-    u'\xa3': u'GBP',  # Unicode Character British Currency Pound Sign (U+00A3)
-    u'\u20ac': u'EUR',  # Unicode Character British Currency Euro Symbol (U+20AC)
-    u'\xd7': u'x',  # Unicode Character Multiplication Sign (U+00D7)
-    u'\xad': u'-',  # 'soft hyphen' (U+00AD) -- &shy;
-    u'\u00B0': u' degrees ',  # Degrees o symbol superscript - Degree Sign U+00B0
-    u'·': u'-',  # cp1252 0xb7 U+00B7 MIDDLE DOT
-    u'\u00E2': u'a',  # a^ -- Latin Small Letter A with Circumflex U+00E2
-    u'\xe9': u'e',  # U+00e9 Latin Small Letter E with Acute
-    u'\u2026': u'...',  # U+2026  a horizontal ellipsis
-    u'\u2192': u'->',  # U+2192  Rightwards Arrow
-    u'\u2197': u'FIXME_NEA_U+2197',  # U+2197  North East Arrow
-    u'\uFF08': u'(',  # U+FF08  Fullwidth Left Parenthesis
-    u'\uFF09': u')',  # U+FF09  Fullwidth Right  Parenthesis
+    '“': '"',  # 201C  LEFT DOUBLE QUOTATION MARK
+    '”': '"',  # 201D  RIGHT DOUBLE QUOTATION MARK
+    '‘': "'",  # 2018  LEFT SINGLE QUOTATION MARK
+    '’': "'",  # 2019  RIGHT SINGLE QUOTATION MARK
+    '–': '-',  # 2013  EN DASH
+    '—': '-',  # 2014  EM DASH
+    # u'©': u'&copy;',  # 00A9  COPYRIGHT SIGN
+    # u'©': u'(c)',  #  00A9  COPYRIGHT SIGN
+    # u'®': u'&reg;',  # 00AE  REGISTERED SIGN
+    # u'®': u'(R)',  # 00AE  REGISTERED SIGN
+    # u'\xa0': u'&nbsp;',  # 'NO-BREAK SPACE' (U+00A0)
+    # u'\xa0': u' ',  # 'NO-BREAK SPACE' (U+00A0)
+    '\xa3': 'GBP',  # Unicode Character British Currency Pound Sign (U+00A3)
+    '\u20ac': 'EUR',  # Unicode Character British Currency Euro Symbol (U+20AC)
+    '\xd7': 'x',  # Unicode Character Multiplication Sign (U+00D7)
+    '\xad': '-',  # 'soft hyphen' (U+00AD) -- &shy;
+    '\u00b0': ' degrees ',  # Degrees o symbol superscript - Degree Sign U+00B0
+    '·': '-',  # cp1252 0xb7 U+00B7 MIDDLE DOT
+    '\u00e2': 'a',  # a^ -- Latin Small Letter A with Circumflex U+00E2
+    '\xe9': 'e',  # U+00e9 Latin Small Letter E with Acute
+    '\u2026': '...',  # U+2026  a horizontal ellipsis
+    '\u2192': '->',  # U+2192  Rightwards Arrow
+    '\u2197': 'FIXME_NEA_U+2197',  # U+2197  North East Arrow
+    '\uff08': '(',  # U+FF08  Fullwidth Left Parenthesis
+    '\uff09': ')',  # U+FF09  Fullwidth Right  Parenthesis
 }
 
 if os.environ.get('USE_HTML'):
-    global_mappings_dict[u'©'] = u'&copy;'  #  00A9  COPYRIGHT SIGN
-    global_mappings_dict[u'®'] = u'&reg;'  # 00AE  REGISTERED SIGN
-    global_mappings_dict[u'™'] = u'&trade;'  # TRADE MARK SIGN (U+2122)
-    global_mappings_dict[u'\xa0'] = u'&nbsp;'  # 'NO-BREAK SPACE' (U+00A0)
-    global_mappings_dict[u'\u202F'] = u'&nbsp;'  # Narrow No-Break Space (NNBSP) (U+202F)
-    #global_mappings_dict[] =
+    global_mappings_dict['©'] = '&copy;'  #  00A9  COPYRIGHT SIGN
+    global_mappings_dict['®'] = '&reg;'  # 00AE  REGISTERED SIGN
+    global_mappings_dict['™'] = '&trade;'  # TRADE MARK SIGN (U+2122)
+    global_mappings_dict['\xa0'] = '&nbsp;'  # 'NO-BREAK SPACE' (U+00A0)
+    global_mappings_dict['\u202f'] = '&nbsp;'  # Narrow No-Break Space (NNBSP) (U+202F)
+    # global_mappings_dict[] =
 elif os.environ.get('NO_HTML', True):
-    global_mappings_dict[u'©'] = u'(c)'  #  00A9  COPYRIGHT SIGN
-    global_mappings_dict[u'®'] = u'(R)'  # 00AE  REGISTERED SIGN
-    global_mappings_dict[u'™'] = u'(TM)'  # TRADE MARK SIGN (U+2122)
-    global_mappings_dict[u'\xa0'] = u' '  # 'NO-BREAK SPACE' (U+00A0)
-    global_mappings_dict[u'\u202F'] = u' '  # Narrow No-Break Space (NNBSP) (U+202F)
-    #global_mappings_dict[] =
+    global_mappings_dict['©'] = '(c)'  #  00A9  COPYRIGHT SIGN
+    global_mappings_dict['®'] = '(R)'  # 00AE  REGISTERED SIGN
+    global_mappings_dict['™'] = '(TM)'  # TRADE MARK SIGN (U+2122)
+    global_mappings_dict['\xa0'] = ' '  # 'NO-BREAK SPACE' (U+00A0)
+    global_mappings_dict['\u202f'] = ' '  # Narrow No-Break Space (NNBSP) (U+202F)
+    # global_mappings_dict[] =
 
 
 def my_simple_asciinator(in_str, mappings_dict=None):
@@ -103,15 +102,14 @@ def my_simple_asciinator(in_str, mappings_dict=None):
 
     result = in_str
     for char_to_replace in mappings_dict:
-        #if char_to_replace == u'\202F':
+        # if char_to_replace == u'\202F':
         #    import pdb; pdb.set_trace()
         result = result.replace(char_to_replace, mappings_dict[char_to_replace])
     return result
 
 
 def read_file(filename, encoding='utf-8', out_filename=None):
-    """Dump to stdout or write to out_filename, assuming successfull conversion into 7-bit us-ascii
-    """
+    """Dump to stdout or write to out_filename, assuming successfull conversion into 7-bit us-ascii"""
     encoding = encoding or 'utf-8'
     f = open(filename, 'rb')
     data = f.read()
@@ -120,28 +118,28 @@ def read_file(filename, encoding='utf-8', out_filename=None):
 
     data = data.replace('\r', '')  # strip windows newlines
 
-    #print('*' * 65)
+    # print('*' * 65)
     data = my_simple_asciinator(data)  # NB returns Unicode string type, may not really be ASCII
-    #data = data.encode('ASCII')
-    #print(data,)
+    # data = data.encode('ASCII')
+    # print(data,)
     r"""
     f = open(r'c:\tmp\d.txt', 'wb')
     f.write(data)
     f.close()
     """
     if out_filename:
-        #import pdb; pdb.set_trace()
+        # import pdb; pdb.set_trace()
         data = data.encode('us-ascii')
         f = open(out_filename, 'wb')
         f.write(data)
         f.close()
     else:
         sys.stdout.write(data)
-    #print('*' * 65)
+    # print('*' * 65)
 
 
 def doit():
-    test_data = u"""
+    test_data = """
 
 # different endash, emdash, hypens
 
@@ -172,7 +170,7 @@ TODO:
         print(test_data.encode('ASCII', 'elinks'))  # NOTE requires elinks import above to succeed
     except LookupError:
         print('elinks needed for this demo/test')
-    #print('*' * 65)
+    # print('*' * 65)
 
 
 def main(argv=None):
@@ -205,5 +203,5 @@ def main(argv=None):
     return 0
 
 
-if __name__ == "__main__":
+if __name__ == '__main__':
     sys.exit(main())
