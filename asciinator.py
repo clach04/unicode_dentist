@@ -67,6 +67,8 @@ global_mappings_dict = {
     u'\u00E2': u'a',  # a^ -- Latin Small Letter A with Circumflex U+00E2
     u'\xe9': u'e',  # U+00e9 Latin Small Letter E with Acute
     u'\u2026': u'...',  # U+2026  a horizontal ellipsis
+    u'\u2192': u'->',  # U+2192  Rightwards Arrow
+    u'\u2197': u'FIXME_NEA_U+2197',  # U+2197  North East Arrow
     u'\uFF08': u'(',  # U+FF08  Fullwidth Left Parenthesis
     u'\uFF09': u')',  # U+FF09  Fullwidth Right  Parenthesis
 }
