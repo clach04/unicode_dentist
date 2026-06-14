@@ -3,4 +3,3 @@ skip = *.bak,*~
 write-changes = true
 #count =
 #quiet-level = 3
-
