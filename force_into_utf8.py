@@ -14,7 +14,7 @@ is_py3 = sys.version_info >= (3,)
 # if match_git_output  is False, attempt to treat as cp1252... which might fail
 # if match_git_output  is True, emit "<ff>" (without double quotes) the same way git escapes non-ascii.
 # if it turns out not to be valid cp1252 then this NEEDS to be True
-# TODO add support so false means attemp cp1252, and then fall back if that fails
+# TODO add support so false means attempt cp1252, and then fall back if that fails
 match_git_output = False
 # match_git_output = True
 
@@ -41,7 +41,7 @@ def treat_as_cp1252_handler(e):
         problem_bytes = e.object[e.start : e.end]
         # print('problem bytes %r' % problem_bytes)
         if match_git_output:
-            # NOTE doesn't actually get here, exception handlers not supportted in 2.7
+            # NOTE doesn't actually get here, exception handlers not supported in 2.7
             hex_representation = ''.join(
                 hex(single_byte) for single_byte in problem_bytes
             )  # quick and dirty gex multiple 0x...
