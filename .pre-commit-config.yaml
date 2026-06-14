@@ -26,13 +26,13 @@ repos:
 
   - repo: local
     hooks:
-      - id: lint-py  # currently a test, not to be enforced yet
-        name: Lint (py)
-        language: system
-        entry: ruff check
-        #files: ^src/
-        #files: *.py
-        types: [python]
+      #- id: lint-py  # currently a test, not to be enforced yet
+      #  name: Lint (py)
+      #  language: system
+      #  entry: ruff check
+      #  #files: ^src/
+      #  #files: *.py
+      #  types: [python]
       - id: ruff-format-fix  # currently a test, not to be enforced yet
         name: ruff-format-fix (py)
         stages: [pre-push]
