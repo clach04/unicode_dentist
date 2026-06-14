@@ -1,4 +1,5 @@
 # prek install --hook-type pre-commit --hook-type pre-push
+# prek run
 
 # https://github.com/j178/prek
 # https://github.com/pre-commit/pre-commit
