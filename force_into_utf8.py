@@ -2,8 +2,7 @@
 # -*- coding: utf-8 -*-
 # vim:ts=4:sw=4:softtabstop=4:smarttab:expandtab
 #
-"""See asciinator.py
-"""
+"""See asciinator.py"""
 
 import codecs
 import os
@@ -17,20 +16,21 @@ is_py3 = sys.version_info >= (3,)
 # if it turns out not to be valid cp1252 then this NEEDS to be True
 # TODO add support so false means attemp cp1252, and then fall back if that fails
 match_git_output = False
-#match_git_output = True
+# match_git_output = True
+
 
 def treat_as_cp1252_handler(e):
     """Very specific handle to attempt to handle ONLY cp1252 in utf-8 moji-bake type scenario. Python 3.x ONLY
-        encoding: the encoding currently being used.
-        object: the string being encoded, or the bytes being decoded.
-        start: the first index where we encounter an error.
-        end: the last index where we encounter an error.
-        reason: the error message.
+    encoding: the encoding currently being used.
+    object: the string being encoded, or the bytes being decoded.
+    start: the first index where we encounter an error.
+    end: the last index where we encounter an error.
+    reason: the error message.
 
     """
     if e is UnicodeEncodeError:
         raise NotImplementedError('UnicodeEncodeError')
-    else: # e is UnicodeDecodeError
+    else:  # e is UnicodeDecodeError
         """
         print('start %r' % e.start)
         print('end %r' % e.end)
@@ -38,15 +38,19 @@ def treat_as_cp1252_handler(e):
         print('object %r' % e.object)
         #print(' %r' % e.)
         """
-        problem_bytes = e.object[e.start:e.end]
-        #print('problem bytes %r' % problem_bytes)
+        problem_bytes = e.object[e.start : e.end]
+        # print('problem bytes %r' % problem_bytes)
         if match_git_output:
             # NOTE doesn't actually get here, exception handlers not supportted in 2.7
-            hex_representation = ''.join(hex(single_byte) for single_byte in problem_bytes)  # quick and dirty gex multiple 0x...
-            #replacement_character = hex_representation.replace('0x', '\\x')  # the way Python3 handles it above
+            hex_representation = ''.join(
+                hex(single_byte) for single_byte in problem_bytes
+            )  # quick and dirty gex multiple 0x...
+            # replacement_character = hex_representation.replace('0x', '\\x')  # the way Python3 handles it above
             replacement_character = '<%s>' % hex_representation.replace('0x', '')  # the way git handles it
         else:
-            replacement_character = problem_bytes.decode('cp1252', errors='backslashreplace')  # this fails under Python 2.7 with same UnicodeDecodeError in callback error :-(
+            replacement_character = problem_bytes.decode(
+                'cp1252', errors='backslashreplace'
+            )  # this fails under Python 2.7 with same UnicodeDecodeError in callback error :-(
         """
         try:
             replacement_character = problem_bytes.decode('cp1252')
@@ -54,9 +58,9 @@ def treat_as_cp1252_handler(e):
             # UnicodeDecodeError not supported in Python 2.7 in a callback :-(
             replacement_character = '\\x%s' % problem_bytes.hex()
         """
-        #print('problem bytes treated as cp1252 (\\x means unmapped)%r' % replacement_character)
+        # print('problem bytes treated as cp1252 (\\x means unmapped)%r' % replacement_character)
         return replacement_character, e.end
-        #raise NotImplementedError('UnicodeDecodeError')
+        # raise NotImplementedError('UnicodeDecodeError')
 
 
 def doit():
@@ -64,8 +68,8 @@ def doit():
     test_bytes = b'utf8 \xc2\xa9 win1252 \xa9 - 0x81 missing from cp1252 \x81'
     print('%r' % test_bytes)
     print('*' * 65)
-    #print(test_bytes.decode('utf-8'))
-    #print('*' * 65)
+    # print(test_bytes.decode('utf-8'))
+    # print('*' * 65)
     print(test_bytes.decode('utf-8', errors='backslashreplace'))  # works only for py3
 
     codecs.register_error('treat_as_cp1252', treat_as_cp1252_handler)
@@ -113,5 +117,5 @@ def main(argv=None):
     return 0
 
 
-if __name__ == "__main__":
+if __name__ == '__main__':
     sys.exit(main())
