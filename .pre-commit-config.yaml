@@ -5,6 +5,8 @@
 
 #default_install_hook_types: [pre-commit, pre-push, commit-msg]
 
+# https://pre-commit.com/#temporarily-disabling-hooks
+
 repos:
   - repo: https://github.com/pre-commit/pre-commit-hooks
     rev: v2.3.0
@@ -31,6 +33,14 @@ repos:
         #files: ^src/
         #files: *.py
         types: [python]
+      - id: ruff-format-fix  # currently a test, not to be enforced yet
+        name: ruff-format-fix (py)
+        stages: [pre-push]
+        language: system
+        entry: ruff format
+        #files: ^src/
+        #files: *.py
+        types: [python]
       #- id: ruff-format-check  # currently a test, not to be enforced yet
       #  name: ruff-format-check (py)
       #  language: system
@@ -38,11 +48,3 @@ repos:
       #  #files: ^src/
       #  #files: *.py
       #  types: [python]
-      - id: ruff-format-fix  # currently a test, not to be enforced yet
-        name: ruff-format-check (py)
-        stages: [pre-push]
-        language: system
-        entry: ruff format
-        #files: ^src/
-        #files: *.py
-        types: [python]
