@@ -1,6 +1,6 @@
 # https://github.com/pre-commit/pre-commit
 repos:
--   repo: https://github.com/pre-commit/pre-commit-hooks
+  - repo: https://github.com/pre-commit/pre-commit-hooks
     rev: v2.3.0
     hooks:
     -   id: end-of-file-fixer
@@ -15,3 +15,13 @@ repos:
     -   id: check-added-large-files
     -   id: debug-statements
     -   id: detect-private-key
+
+  - repo: local
+    hooks:
+      - id: lint-py  # currently a test, not to be enforced yet
+        name: Lint (py)
+        language: system
+        entry: ruff check
+        #files: ^src/
+        #files: *.py
+        types: [python]
