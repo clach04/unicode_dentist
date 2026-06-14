@@ -15,13 +15,14 @@ import glob
 import os
 import sys
 
+
 def main(argv=None):
     if argv is None:
         argv = sys.argv
 
-    '''Usage:
+    """Usage:
         encoding filename(s)_to_check
-    '''
+    """
     # nasty argv command line argument parsing
     expect_encoding = 'us-ascii'
     filename_pattern = '*'
@@ -49,7 +50,7 @@ def main(argv=None):
         f.close()
         problem_lines = 0
         for line_count, line_bytes in enumerate(entire_file_bytes.split(nl_bytes), 1):
-            #print(line_count)
+            # print(line_count)
             try:
                 line_bytes.encode(expect_encoding)
             except UnicodeDecodeError:
@@ -60,6 +61,5 @@ def main(argv=None):
     return 0
 
 
-if __name__ == "__main__":
+if __name__ == '__main__':
     sys.exit(main())
-
