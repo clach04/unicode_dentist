@@ -18,18 +18,19 @@ import webbrowser
 
 IS_PY2 = sys.version_info[0] == 2
 
-#import cherrypy # http://www.cherrypy.org/
+# import cherrypy # http://www.cherrypy.org/
 ## rhubarb tart # http://rhubarbtart.org/
-## PySite (not Pysite, note case) 
+## PySite (not Pysite, note case)
 ##      http://www.programmingforums.org/forum/f43-python/t9028-pysite-web-development-framework.html
 ##      http://www.programmingforums.org/thread9028.html
 try:
-    #raise(ImportError)
+    # raise(ImportError)
     import cherrypy
     from cherrypy.lib.static import serve_file
 except ImportError:
     try:
         import dietcherrypy as cherrypy
+
         serve_file = cherrypy.serve_file
     except ImportError:
         cherrypy = None
@@ -38,13 +39,14 @@ except ImportError:
 ## TODO consider moving this into dietcherry
 import inspect
 
+
 def function_arg_list(object):
-    """Simplistic method/function argument lister, returns list of strings. 
+    """Simplistic method/function argument lister, returns list of strings.
     Ignores "self" for object methods.
     """
     function_args = inspect.getargspec(object)[0]
     if inspect.ismethod(object):
-        function_args = function_args[1:] ## ignore first argument, we assume it is "self"
+        function_args = function_args[1:]  ## ignore first argument, we assume it is "self"
     return function_args
 
 
@@ -56,8 +58,8 @@ def form_gen(function_object=None, post=None, text_message=None, url=None, defau
     if post is None:
         post = False
     if text_message is None:
-        text_message="Please fill in the form and click the submit button"
-    
+        text_message = 'Please fill in the form and click the submit button'
+
     simple_template = """
 <form action="%s" method="%s">
     %s
@@ -66,9 +68,9 @@ def form_gen(function_object=None, post=None, text_message=None, url=None, defau
 %s
     <input type="submit" />
 </form>
-"""    
-    
-    the_fields=''
+"""
+
+    the_fields = ''
     for arg in function_arg_list(function_object):
         def_val = ''
         if default_values:
@@ -77,30 +79,37 @@ def form_gen(function_object=None, post=None, text_message=None, url=None, defau
                     def_val = default_values[arg]
             except KeyError:
                 pass
-            
-        the_fields += '    %s: <input type="text" name="%s" value="%s"/><br>\n' % (arg, arg, def_val)
-    
+
+        the_fields += '    %s: <input type="text" name="%s" value="%s"/><br>\n' % (
+            arg,
+            arg,
+            def_val,
+        )
+
     if post:
-        form_type="POST"
+        form_type = 'POST'
     else:
-        form_type="GET"
+        form_type = 'GET'
     the_form = simple_template % (function_object.__name__, form_type, text_message, the_fields)
     return the_form
 
+
 ############################
 
+
 def dumb_word_split(in_str):
-    in_str=in_str.replace(b',', b' ');
-    in_str=in_str.replace(b'.', b' ');
-    in_str=in_str.replace(b'"', b' ');
-    in_str=in_str.replace(b"'", b' ');
+    in_str = in_str.replace(b',', b' ')
+    in_str = in_str.replace(b'.', b' ')
+    in_str = in_str.replace(b'"', b' ')
+    in_str = in_str.replace(b"'", b' ')
     return in_str.split()
+
 
 def find_non_ascii(line_obj, expected_encoding=None, filename=None):
     """
     @param line_obj  - object that when iterated returns lines,
             e.g. list of strings, a file object
-    
+
     @param expected_encoding what encoding is the file in?
     """
     print('expected_encoding:', expected_encoding)
@@ -109,12 +118,12 @@ def find_non_ascii(line_obj, expected_encoding=None, filename=None):
         max_ascii = chr(127)
     else:
         max_ascii = 127
-    #print('using %r as max_ascii' % (max_ascii,))
+    # print('using %r as max_ascii' % (max_ascii,))
 
     result = []
     data_count = 0
     extended_chars = {}
-    
+
     filename = filename or 'unknown_file'
     for line_count, line in enumerate(line_obj):
         line_count += 1
@@ -123,12 +132,14 @@ def find_non_ascii(line_obj, expected_encoding=None, filename=None):
             # process line, byte at a time
             data_count += 1
             if x >= max_ascii:
-                print_each_context=True
+                print_each_context = True
                 if print_each_context:
                     if IS_PY2:
                         result.append('%s:%d: %3d %s @ %d' % (filename, line_count, ord(x), x, data_count))
                     else:
-                        result.append('%s:%d: %3d %s @ %d' % (filename, line_count, x, x, data_count))  # TODO chr(x) before count
+                        result.append(
+                            '%s:%d: %3d %s @ %d' % (filename, line_count, x, x, data_count)
+                        )  # TODO chr(x) before count
                     result.append(repr(line))
                     if IS_PY2:
                         result.append(line)
@@ -137,9 +148,9 @@ def find_non_ascii(line_obj, expected_encoding=None, filename=None):
                     extended_chars[x] += 1
                 except KeyError:
                     extended_chars[x] = 1
-                #print('%3d' %(ord(x),) , x, '@', data_count)
-    #print(len(line), line)
-    #print(extended_chars)
+                # print('%3d' %(ord(x),) , x, '@', data_count)
+    # print(len(line), line)
+    # print(extended_chars)
     if extended_chars:
         result.append('========= character table =========')
         for x in extended_chars:
@@ -150,26 +161,62 @@ def find_non_ascii(line_obj, expected_encoding=None, filename=None):
                         unicode_codepoint = x.decode(expected_encoding)
                     else:
                         unicode_codepoint = chr(x).encode(expected_encoding)  # not convinced this approach will work
-                    unicode_codepoint_utf8=unicode_codepoint.encode('utf8')
-                    unicode_codepoint=repr(unicode_codepoint)+' 0x%04x'%ord(unicode_codepoint)+' utf8:"'+unicode_codepoint_utf8+'" ('+repr(unicode_codepoint_utf8)+')'
+                    unicode_codepoint_utf8 = unicode_codepoint.encode('utf8')
+                    unicode_codepoint = (
+                        repr(unicode_codepoint)
+                        + ' 0x%04x' % ord(unicode_codepoint)
+                        + ' utf8:"'
+                        + unicode_codepoint_utf8
+                        + '" ('
+                        + repr(unicode_codepoint_utf8)
+                        + ')'
+                    )
                 except UnicodeDecodeError:
-                    #unicode_codepoint=''
-                    unicode_codepoint='not valid %s character' % expected_encoding
+                    # unicode_codepoint=''
+                    unicode_codepoint = 'not valid %s character' % expected_encoding
                 except UnicodeEncodeError:
-                    unicode_codepoint='not valid %s character' % expected_encoding
+                    unicode_codepoint = 'not valid %s character' % expected_encoding
             else:
-                unicode_codepoint=''
+                unicode_codepoint = ''
             if IS_PY2:
-                result.append('%3d 0x%x' % (ord(x),ord(x),)  + ' ' + unicode_codepoint + ' ' + x + ' ' + 'occurrences' + ' ' + str(extended_chars[x]))
+                result.append(
+                    '%3d 0x%x'
+                    % (
+                        ord(x),
+                        ord(x),
+                    )
+                    + ' '
+                    + unicode_codepoint
+                    + ' '
+                    + x
+                    + ' '
+                    + 'occurrences'
+                    + ' '
+                    + str(extended_chars[x])
+                )
             else:
                 # FIXME by default sys.stdout defaults to utf-8 encoding (see sys.stdout.encoding) on all platforms
                 # so chr(x) will result in unprintable characters under Windows
-                result.append('%3d 0x%x' % (x, x,)  + ' ' + unicode_codepoint + ' ' + chr(x)  + ' ' + 'occurrences' + ' ' + repr(extended_chars[x]))
+                result.append(
+                    '%3d 0x%x'
+                    % (
+                        x,
+                        x,
+                    )
+                    + ' '
+                    + unicode_codepoint
+                    + ' '
+                    + chr(x)
+                    + ' '
+                    + 'occurrences'
+                    + ' '
+                    + repr(extended_chars[x])
+                )
         result.append('=' * 65)
         result.append('')
-    
+
     word_list = dumb_word_split(line)
-    
+
     """
     word_count = 0
     print('debug', repr(line))
@@ -189,14 +236,14 @@ class Root(object):
     def __init__(self):
         self.picdir = os.path.abspath(os.path.dirname(__file__))
         self.picdir = os.path.join(self.picdir, 'data')
-    
+
     def index(self, string_data=None, expect_encoding='latin1'):
         if None in [string_data]:  # if None in all kwargs
             # from http://aspn.activestate.com/ASPN/Cookbook/Python/Recipe/66062
             this_function_name = sys._getframe().f_code.co_name
             this_function = getattr(self, this_function_name)
-            #__result += form_gen(function_object=this_function, default_values=locals())
-            __result =  '''<title>Unicode Dentist<title>
+            # __result += form_gen(function_object=this_function, default_values=locals())
+            __result = """<title>Unicode Dentist<title>
             
             <a href="http://www.imdb.com/title/tt0074860/quotes">is it safe?</a>
             </br>
@@ -211,7 +258,7 @@ class Root(object):
 </form>
 
 
-            '''
+            """
             return __result
         print(repr(string_data[:10]))
         string_data = string_data.replace('\r', '')
@@ -224,7 +271,8 @@ class Root(object):
         result = find_non_ascii(string_data.split('\n'), expected_encoding=expect_encoding)
         cherrypy.response.headers['Content-Type'] = 'text/plain'
         return result
-    index.exposed=True
+
+    index.exposed = True
 
 
 def main(argv=None):
@@ -242,11 +290,13 @@ def main(argv=None):
             expect_encoding = argv[2]
         except IndexError:
             expect_encoding = 'us-ascii'
-        
+
         f = open(filename, 'rb')
         string_data = f.read()
         f.close()
-        string_data = string_data.replace(b'\r', b'')  # NOTE universal new lines file mode would be better but not all implementations have this yet.....
+        string_data = string_data.replace(
+            b'\r', b''
+        )  # NOTE universal new lines file mode would be better but not all implementations have this yet.....
         result = find_non_ascii(string_data.split(b'\n'), expected_encoding=expect_encoding, filename=filename)
         if result:
             if IS_PY2:
@@ -256,17 +306,18 @@ def main(argv=None):
         else:
             print('%r is valid %s' % (filename, expect_encoding))
         return 0
-    
+
     if cherrypy:
         print('cherrypy.__version__', cherrypy.__version__)
-        
+
         class DumbOpt(object):
             pass
+
         opt = DumbOpt()
         opt.no_webbrowser = False
         server_name = 'localhost'  # TODO lookup hostname
         server_port = 8080
-        
+
         """
         ## cherrypy v3 quickstart (no call backs allowed, need to thread locally)
         #cherrypy.quickstart(Root(form, self._webform_callback))
@@ -276,28 +327,26 @@ def main(argv=None):
         cherrypy.engine.start_with_callback(webbrowser.open, ('http://localhost:%d'%server_port,))
         """
         ### cherrypy 2.?.? (and dietcherypy)
-        #cherrypy.config.update({'server.socketPort':server_port}) # maybe a 3.0 thing?
-        cherrypy.config.update({'server.socket_port':server_port}) # CherryPy 3.1.2
+        # cherrypy.config.update({'server.socketPort':server_port}) # maybe a 3.0 thing?
+        cherrypy.config.update({'server.socket_port': server_port})  # CherryPy 3.1.2
         cherrypy.PERFORM_UTF8_DECODING_ON_URL_PARAMETERS = False
-        mywebapp=Root()
+        mywebapp = Root()
         if opt.no_webbrowser:
-            cherrypy.root=mywebapp
+            cherrypy.root = mywebapp
             cherrypy.server.start()
         else:
             # style start for:
             #   CherryPy 3.1 (tested with 3.1.2)
             #   dietcherypy
             def launch_webbrowser():
-                url='http://%s:%d' % (server_name, server_port)
+                url = 'http://%s:%d' % (server_name, server_port)
                 webbrowser.open(url)
-            cherrypy.engine.subscribe('start', launch_webbrowser) # CherryPy 3.1 api
-            cherrypy.quickstart(mywebapp)
 
+            cherrypy.engine.subscribe('start', launch_webbrowser)  # CherryPy 3.1 api
+            cherrypy.quickstart(mywebapp)
 
     return 0
 
 
-if __name__ == "__main__":
+if __name__ == '__main__':
     sys.exit(main())
-
-
