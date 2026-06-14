@@ -3,6 +3,8 @@
 # https://github.com/j178/prek
 # https://github.com/pre-commit/pre-commit
 
+#default_install_hook_types: [pre-commit, pre-push, commit-msg]
+
 repos:
   - repo: https://github.com/pre-commit/pre-commit-hooks
     rev: v2.3.0
