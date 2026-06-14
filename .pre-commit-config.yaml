@@ -1,19 +1,30 @@
-# prek install --hook-type pre-commit --hook-type pre-push
-# prek run
-
+# Use prek, with pre-commit ONLY for backwards compat
 # https://github.com/j178/prek
+# https://prek.j178.dev/
+#
+#   prek install --hook-type pre-commit --hook-type pre-push
+#   prek run
+#   prek run -vvv   #  verbose tracing output
+#   NOTE on every run prek writes a log file to ~/.cache/prek/prek.log
+#
+
+# Use pre-commit ONLY for backwards compat
 # https://github.com/pre-commit/pre-commit
 
-#default_install_hook_types: [pre-commit, pre-push, commit-msg]
-
 # https://pre-commit.com/#temporarily-disabling-hooks
+
+
+#default_install_hook_types: [pre-commit, pre-push, commit-msg]
+default_install_hook_types: [pre-commit, pre-push]
 
 repos:
   - repo: https://github.com/pre-commit/pre-commit-hooks
     rev: v2.3.0
     hooks:
     -   id: end-of-file-fixer
+        stages: [pre-push]
     -   id: trailing-whitespace
+        stages: [pre-push]
     -   id: check-case-conflict
     -   id: check-executables-have-shebangs
     #-   id: check-shebang-scripts-are-executable
@@ -26,6 +37,7 @@ repos:
     -   id: detect-private-key
 
   - repo: local
+    # Manually install https://github.com/astral-sh/ruff rather than using download repos
     hooks:
       #- id: lint-py  # currently a test, not to be enforced yet
       #  name: Lint (py)
