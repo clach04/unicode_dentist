@@ -20,8 +20,25 @@ import glob
 import os
 import sys
 
+try:
+    # out of box default Windows support better than alive_progress, but still not perfect end up with ? output
+    import tqdm  # pip install tqdm ; https://github.com/tqdm/tqdm
+except ImportError:
+    tqdm = None
+try:
+    raise ImportError
+    # no support for non-context-manager usage
+    # out of box default Windows output display not great
+    import alive_progress  # pip install -U "alive_progress<2" ; https://github.com/rsalmei/alive-progress?tab=readme-ov-file#python-end-of-life-notice
+except ImportError:
+    alive_progress = None
+# alternatively check out https://github.com/pavdmyt/yaspin - spinner
+# alternatively manually implement a dumb spinner?
+
 is_win = sys.platform.startswith('win')
 extensions_to_check = ['.md', '.txt']
+
+non_ascii_message = 'Consider using force_into_utf8.py  asciinator.py or manually fix'
 
 def walker(directory_name, process_file_function=None, process_dir_function=None, extra_params_dict=None):
     """extra_params_dict optional dict to be passed into process_file_function() and process_dir_function()
@@ -30,15 +47,35 @@ def walker(directory_name, process_file_function=None, process_dir_function=None
         extra_params_dict = extra_params_dict or {}
     """
     extra_params_dict or {}
+    if tqdm:  # can not perform bool conditional on "t" :-( ; TypeError: bool() undefined when iterable == total == None
+        #t = tqdm.tqdm()
+        t = tqdm.tqdm(desc='Walking files', unit=' files', ascii=True)  # progress bar
+        #t = tqdm.tqdm(unit=' files', ascii=True)  # progress bar
+    else:
+        t = None
+    if False and alive_progress:  # Disabled due to call later not working, expects a context manager
+        # TODO debug and/or try https://www.reddit.com/r/learnpython/comments/ozny83/how_to_use_context_manager_without_with/
+        bar = alive_progress.alive_bar()
+    else:
+        bar = None
     # TODO scandir instead... would be faster - but for py2.7 requires external lib
     for root, subdirs, files in os.walk(directory_name):
         if process_file_function:
             for filepath in files:
                 full_path = os.path.join(root,filepath)
+                if t is not None:
+                    t.update()
+                if bar:
+                    bar()
                 process_file_function(full_path, extra_params_dict=extra_params_dict)
         if process_dir_function:
             for sub in subdirs:
                 full_path = os.path.join(root, sub)
+                if t is not None:
+                    t.update()
+                if bar:
+                    #next(bar)()  # failed
+                    bar(skipped=False)
                 process_dir_function(full_path, extra_params_dict=extra_params_dict)
 
 def per_file_function_callback(full_path, extra_params_dict=None):
@@ -68,12 +105,15 @@ def per_file_function_callback(full_path, extra_params_dict=None):
         check_file(full_path)
         extra_params_dict['counter'] += 1
 
-stop_on_invalid_encoding = True
+stop_on_invalid_encoding = False
+if os.environ.get('STOP_ON_BAD_ENCODING'):
+    stop_on_invalid_encoding = True
 if os.environ.get('DO_NOT_STOP'):
     stop_on_invalid_encoding = False
 file_encoding = os.environ.get('FILE_ENCODING', 'utf-8')
 global_bad_file_counter = 0
 def check_file(filename):
+        #import time ; time.sleep(1)  # DEBUG sleep 1 second
         f = open(filename, 'rb')
         d = f.read()
         f.close()
@@ -87,7 +127,7 @@ def check_file(filename):
             global_bad_file_counter += 1
             print('%s is not %s' % (filename, file_encoding))
             if stop_on_invalid_encoding:
-                print('Consider using force_into_utf8.py or manually fix')
+                print(non_ascii_message)
                 raise  # re-raise for now, potential to skip and carry on processing with warning only
 
 
@@ -139,6 +179,14 @@ def main(argv=None):
     print('%d files to check explictly' % len(filenames))
     #print(filenames)
     if filenames:
+        if alive_progress:
+            # currently py3 only, TODO look to add calls to older alive_progress.alive_bar() API
+            # also crappy Windows support out of box
+            filenames = alive_progress.alive_it(filenames)  # progress bar - NOTE needs min version 2, which means Python3 only
+        elif tqdm:
+            #filenames = tqdm.tqdm(filenames)  # progress bar
+            filenames = tqdm.tqdm(filenames, desc='Checking list', unit=' files', ascii=True)  # progress bar
+            #filenames = tqdm.tqdm(filenames, unit=' files', ascii=True)  # progress bar
         for filename_counter, filename in enumerate(filenames):
             # TODO progress log
             check_file(filename)
@@ -161,7 +209,7 @@ def main(argv=None):
 
     if not stop_on_invalid_encoding and global_bad_file_counter:
         print('BAD %d files' % global_bad_file_counter)
-        print('Consider using force_into_utf8.py or manually fix')
+        print(non_ascii_message)
 
     return 0
 
