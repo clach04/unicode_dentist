@@ -7,7 +7,7 @@
 # Copyright (C) 2011  Chris Clark
 #
 # Determine if file content is "safe", e.g. is it pure ASCII?
-# Can specifiy an encoding check but it always looks for non-ASCII bytes.
+# Can specify an encoding check but it always looks for non-ASCII bytes.
 # Encoding is used for display BUT it only really works for Single Byte encodings.
 #
 
