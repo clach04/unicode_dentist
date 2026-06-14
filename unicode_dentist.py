@@ -244,7 +244,7 @@ class Root(object):
             this_function = getattr(self, this_function_name)
             # __result += form_gen(function_object=this_function, default_values=locals())
             __result = """<title>Unicode Dentist<title>
-            
+
             <a href="http://www.imdb.com/title/tt0074860/quotes">is it safe?</a>
             </br>
 <form action="index" method="GET">
@@ -321,7 +321,7 @@ def main(argv=None):
         """
         ## cherrypy v3 quickstart (no call backs allowed, need to thread locally)
         #cherrypy.quickstart(Root(form, self._webform_callback))
-        
+
         ### cherrypy 3.0.2 does NOT have server.start_with_callback it is engine..?
         cherrypy.config.update({'server.socketPort':server_port})
         cherrypy.engine.start_with_callback(webbrowser.open, ('http://localhost:%d'%server_port,))
