@@ -109,7 +109,7 @@ def my_simple_asciinator(in_str, mappings_dict=None):
 
 
 def read_file(filename, encoding='utf-8', out_filename=None):
-    """Dump to stdout or write to out_filename, assuming successfull conversion into 7-bit us-ascii"""
+    """Dump to stdout or write to out_filename, assuming successful conversion into 7-bit us-ascii"""
     encoding = encoding or 'utf-8'
     f = open(filename, 'rb')
     data = f.read()
@@ -141,7 +141,7 @@ def read_file(filename, encoding='utf-8', out_filename=None):
 def doit():
     test_data = """
 
-# different endash, emdash, hypens
+# different endash, emdash, hyphens
 
 –
 —
