@@ -37,10 +37,14 @@ repos:
     -   id: check-json
     -   id: check-yaml
     -   id: check-toml
-    #-   id: check-check-xml
     -   id: check-added-large-files
     -   id: detect-private-key
-    #-   id: debug-statements
+
+  #- repo: https://github.com/pre-commit/pre-commit-hooks
+  #  rev: v2.3.0
+  #  hooks:
+  #  -   id: check-check-xml
+  #  -   id: debug-statements
 
   - repo: local
     # Manually install https://github.com/astral-sh/ruff rather than using download repos
