@@ -51,6 +51,7 @@ global_mappings_dict = {
     '’': "'",  # 2019  RIGHT SINGLE QUOTATION MARK
     '–': '-',  # 2013  EN DASH
     '—': '-',  # 2014  EM DASH
+    '\u2011': '-',  # U+2011   NON-BREAKING HYPHEN
     # u'©': u'&copy;',  # 00A9  COPYRIGHT SIGN
     # u'©': u'(c)',  #  00A9  COPYRIGHT SIGN
     # u'®': u'&reg;',  # 00AE  REGISTERED SIGN
@@ -63,6 +64,7 @@ global_mappings_dict = {
     '\xad': '-',  # 'soft hyphen' (U+00AD) -- &shy;
     '\u00b0': ' degrees ',  # Degrees o symbol superscript - Degree Sign U+00B0
     '·': '-',  # cp1252 0xb7 U+00B7 MIDDLE DOT
+    '\u2022': '-',  # U+2022 Bullet  - tempted to use '*' here... TODO review
     '\u00e2': 'a',  # a^ -- Latin Small Letter A with Circumflex U+00E2
     '\xe9': 'e',  # U+00e9 Latin Small Letter E with Acute
     '\u2026': '...',  # U+2026  a horizontal ellipsis
