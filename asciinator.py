@@ -70,8 +70,16 @@ global_mappings_dict = {
     '\u2026': '...',  # U+2026  a horizontal ellipsis
     '\u2192': '->',  # U+2192  Rightwards Arrow
     '\u2197': 'FIXME_NEA_U+2197',  # U+2197  North East Arrow
+    '≈': '~=',  # U+2248 Almost Equal To  - TODO decide if '~=' or '~'
+    '≠': '!=',  # U+2260 Not Equal To
     '\uff08': '(',  # U+FF08  Fullwidth Left Parenthesis
     '\uff09': ')',  # U+FF09  Fullwidth Right  Parenthesis
+    # outside BMP
+    # These escaped ones for emoji silently fail :-( Only literal works with Python 3.12.5 under Windows (not tested anywhere else)
+    ##  '\u1f61c': ';-p',  # U+1f61c Face with Stuck-Out Tongue and Winking Eye - emoji
+    ## u'\u1f61c': ';-p',  # U+1f61c Face with Stuck-Out Tongue and Winking Eye - emoji
+    # This literal works BUT need to decide if this conversion is wanted, by default disabled (if going to do this, should handle more emjoi than just the one)
+    # u'😜': ';-p',  # U+1f61c Face with Stuck-Out Tongue and Winking Eye - emoji
 }
 
 if os.environ.get('USE_HTML'):
