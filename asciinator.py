@@ -119,7 +119,7 @@ def my_simple_asciinator(in_str, mappings_dict=None):
     return result
 
 
-def read_file(filename, encoding='utf-8', out_filename=None):
+def read_file_write_out(filename, encoding='utf-8', out_filename=None):
     """Dump to stdout or write to out_filename, assuming successful conversion into 7-bit us-ascii"""
     encoding = encoding or 'utf-8'
     f = open(filename, 'rb')
@@ -199,7 +199,9 @@ def main(argv=None):
         encoding = None  # will default to utf-8
 
     try:
-        out_filename = argv[3]  # due to way read_file() reads entire file, this can be the same filename as input
+        out_filename = argv[
+            3
+        ]  # due to way read_file_write_out() reads entire file, this can be the same filename as input
         if out_filename == '-u':
             # use input filename as output
             out_filename = filename
@@ -207,7 +209,7 @@ def main(argv=None):
         out_filename = None  # write to stdout
 
     if filename:
-        read_file(filename, encoding=encoding, out_filename=out_filename)
+        read_file_write_out(filename, encoding=encoding, out_filename=out_filename)
     else:
         doit()
 
