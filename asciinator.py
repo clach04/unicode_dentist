@@ -67,6 +67,7 @@ global_mappings_dict = {
     '\u2022': '-',  # U+2022 Bullet  - tempted to use '*' here... TODO review
     '\u00e2': 'a',  # a^ -- Latin Small Letter A with Circumflex U+00E2
     '\xe9': 'e',  # U+00e9 Latin Small Letter E with Acute
+    '\u200e': '',  # U+200e left-to-right mark (LRM) is a control character (an invisible formatting character)
     '\u2026': '...',  # U+2026  a horizontal ellipsis
     '\u2192': '->',  # U+2192  Rightwards Arrow
     '\u2197': 'FIXME_NEA_U+2197',  # U+2197  North East Arrow
