@@ -199,9 +199,7 @@ def main(argv=None):
         encoding = None  # will default to utf-8
 
     try:
-        out_filename = argv[
-            3
-        ]  # due to way read_file_write_out() reads entire file, this can be the same filename as input
+        out_filename = argv[3]  # due to way read_file_write_out() reads entire file, this can be the same filename as input
         if out_filename == '-u':
             # use input filename as output
             out_filename = filename
