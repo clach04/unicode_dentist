@@ -71,6 +71,10 @@ global_mappings_dict = {
     '\u2026': '...',  # U+2026  a horizontal ellipsis
     '\u2192': '->',  # U+2192  Rightwards Arrow
     '\u2197': 'FIXME_NEA_U+2197',  # U+2197  North East Arrow
+    '\u23bf': 'L',  # U+23bf Dentistry Symbol Light Vertical and Bottom Right  # TODO consider "+"?
+    '\u2500': '-',  # U+2500 Box Drawings Light Horizontal
+    '\u2502': '|',  # U+2502 Box Drawings Light Vertical
+    '\u276f': '>',  # U+276f Heavy Right-Pointing Angle Quotation Mark Ornament
     '≈': '~=',  # U+2248 Almost Equal To  - TODO decide if '~=' or '~'
     '≠': '!=',  # U+2260 Not Equal To
     '\uff08': '(',  # U+FF08  Fullwidth Left Parenthesis
