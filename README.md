@@ -21,6 +21,7 @@ Python 3.x and 2.7 (maybe 2.x?) tools:
   * validate_utf8.py - Python 3 or 2 - check if files are encoded correctly or not, bool pass or fail, use unicode_dentist.py or line_check.py to determine problem(s)
   * force_into_utf8.py - Python 3 ONLY - force file from encoding (possibly moji-bake with both cp1252 and utf-8) into utf-8
   * asciinator.py - Python 3 or 2 - attempt to force a file into 7-bit us-ascii (potentially use force_into_utf8.py, then asciinator.py)
+  * force_into_ascii.py - Python 3 ONLY - force file from encoding (possibly moji-bake with both cp1252 and utf-8) into 7-bit us-ascii, similar to force_into_utf8.py
 
 ## Examples
 
