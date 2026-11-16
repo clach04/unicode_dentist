@@ -59,6 +59,7 @@ global_mappings_dict = {
     # u'\xa0': u'&nbsp;',  # 'NO-BREAK SPACE' (U+00A0)
     # u'\xa0': u' ',  # 'NO-BREAK SPACE' (U+00A0)
     '\xa3': 'GBP',  # Unicode Character British Currency Pound Sign (U+00A3)
+    '\xa6': '|',  # Vertical bar / Broken bar (U+00A6)
     '\u20ac': 'EUR',  # Unicode Character British Currency Euro Symbol (U+20AC)
     '\xd7': 'x',  # Unicode Character Multiplication Sign (U+00D7)
     '\xad': '-',  # 'soft hyphen' (U+00AD) -- &shy;
@@ -71,14 +72,18 @@ global_mappings_dict = {
     '\u2026': '...',  # U+2026  a horizontal ellipsis
     '\u2192': '->',  # U+2192  Rightwards Arrow
     '\u2197': 'FIXME_NEA_U+2197',  # U+2197  North East Arrow
+    '\u22C5': '.',  # U+22C5 Dot Operator
     '\u23bf': 'L',  # U+23bf Dentistry Symbol Light Vertical and Bottom Right  # TODO consider "+"?
     '\u2500': '-',  # U+2500 Box Drawings Light Horizontal
     '\u2502': '|',  # U+2502 Box Drawings Light Vertical
+    '\u2514': '+',  # U+2514 BOX DRAWINGS LIGHT UP AND RIGHT
+    '\u251c': '+',  # U+251c Box Drawings Light Vertical and Right
     '\u276f': '>',  # U+276f Heavy Right-Pointing Angle Quotation Mark Ornament
     '≈': '~=',  # U+2248 Almost Equal To  - TODO decide if '~=' or '~'
     '≠': '!=',  # U+2260 Not Equal To
     '\uff08': '(',  # U+FF08  Fullwidth Left Parenthesis
     '\uff09': ')',  # U+FF09  Fullwidth Right  Parenthesis
+    '\ufffd': '**?**',  # U+FFFD Replacement Character
     # outside BMP
     # These escaped ones for emoji silently fail :-( Only literal works with Python 3.12.5 under Windows (not tested anywhere else)
     ##  '\u1f61c': ';-p',  # U+1f61c Face with Stuck-Out Tongue and Winking Eye - emoji
@@ -203,7 +208,9 @@ def main(argv=None):
         encoding = None  # will default to utf-8
 
     try:
-        out_filename = argv[3]  # due to way read_file_write_out() reads entire file, this can be the same filename as input
+        out_filename = argv[
+            3
+        ]  # due to way read_file_write_out() reads entire file, this can be the same filename as input
         if out_filename == '-u':
             # use input filename as output
             out_filename = filename

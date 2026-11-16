@@ -34,6 +34,7 @@ except ImportError:
     alive_progress = None
 # alternatively check out https://github.com/pavdmyt/yaspin - spinner
 # alternatively manually implement a dumb spinner?
+# Also check out rich.progress which has a nice, ascii-only progress bar
 
 is_win = sys.platform.startswith('win')
 extensions_to_check = ['.md', '.txt']
